@@ -38,8 +38,8 @@ export default function Menu() {
         dispatch(menuItemClick(name));
     }
     return (
-        <div className='m-5'>
-            <div className='shadow-sm flex flex-row w-1/4 py-[2px]  mx-auto items-center justify-evenly border border-gray-200 rounded-lg'>
+        <div className='m-5 absolute top-3 left-0 right-0 bg-white w-1/4 mx-auto'>
+            <div className='shadow-sm flex flex-row py-[2px]  mx-auto items-center justify-evenly border border-gray-200 rounded-lg'>
                 {
                     items.map((item, index) => (
                         <div 

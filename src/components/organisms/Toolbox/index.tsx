@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { menuItemClick } from '@/lib/slice/menuSlice';
 import { changeBrushSize, changeColor } from '@/lib/slice/toolboxSlice';
 import { AnyARecord } from 'dns';
+import { Slider } from '@/components/ui/slider';
 
 type Props = {
 
@@ -23,14 +24,14 @@ export const Toolbox: React.FC<Props> = ({
     const showBrushToolOption = activeMenuItem === MENU_ITEMS.PENCIL || activeMenuItem === MENU_ITEMS.ERASER;
 
     /** HANDLERS */
-    const handleUpdateBrushSize = (e: any) => {
-        dispatch(changeBrushSize({item: activeMenuItem, size: e.target.value}))
+    const handleUpdateBrushSize = (num: number[]) => {
+        dispatch(changeBrushSize({item: activeMenuItem, size: num[0]}))
     }
     const handleUpdateColor = (newColor: string) => {
         dispatch(changeColor({item: activeMenuItem, color: newColor}))
     }
     return (
-        <section className='border border-gray-200 rounded-lg p-3 w-1/6 shadow-sm'>
+        <section className='border border-gray-200 rounded-lg p-3 w-1/6 shadow-lg z-50 absolute top-[15vh] bg-white left-8'>
             <div className='flex flex-col items-start justify-center space-y-4'>
                 {showStrokeToolOption &&
                     (
@@ -64,11 +65,14 @@ export const Toolbox: React.FC<Props> = ({
                 {
                     showBrushToolOption &&
                     (
-                        <div>
+                        <div className='w-full'>
                             <h1>Brush Size</h1>
-                            <div>
-                                <input type='range' min={1} max={10} step={1} onChange={handleUpdateBrushSize} />
-                            </div>
+                            <Slider 
+                                min={1} 
+                                max={10} 
+                                defaultValue={[3]}
+                                onValueChange={handleUpdateBrushSize} 
+                                className='outline-black active:outline-black w-full mt-2' />
                         </div>
                     )
                 }
