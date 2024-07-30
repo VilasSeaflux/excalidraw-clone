@@ -15,9 +15,8 @@ export const Toolbox: React.FC<Props> = ({
 
 }) => {
     /** STATE DATA */
-    const [selected, setSelected] = useState<string>('');
     const { activeMenuItem } = useAppSelector(state => state.menu);
-
+    const color = useAppSelector(state => state.toolbox[activeMenuItem].color);
     /** VARIABLES */
     const dispatch = useAppDispatch();
     const showStrokeToolOption = activeMenuItem === MENU_ITEMS.PENCIL;
@@ -44,7 +43,7 @@ export const Toolbox: React.FC<Props> = ({
                                             <div
                                                 key={index}
                                                 style={{ backgroundColor: item }}
-                                                className={`w-6 h-6 p-1 border border-gray-200 rounded-md mt-1 hover:scale-110 transition-all duration-300 hover:border hover:border-gray-600 ${item === selected ? 'border-black ' : ''}`}
+                                                className={`w-6 h-6 p-1 border border-gray-200 rounded-md mt-1 hover:scale-110 transition-all duration-300 hover:border hover:border-gray-600 ${item === color ? 'border-black ' : ''}`}
                                                 onClick={() => handleUpdateColor(item)}
                                             />
                                         ))
@@ -52,10 +51,9 @@ export const Toolbox: React.FC<Props> = ({
                                 </div>
                                 <span className='text-sm text-gray-300'>|</span>
                                 <div
-                                    key={selected}
-                                    style={{ backgroundColor: selected || 'white' }}
+                                    key={color}
+                                    style={{ backgroundColor: color || 'white' }}
                                     className='w-6 h-6 p-1 border border-gray-400 rounded-md mt-1 scale-110'
-                                    onClick={() => setSelected('')}
                                 />
 
                             </div>

@@ -1,6 +1,8 @@
 'use client'
-import { useAppSelector } from '@/hooks/store';
-import React, { useEffect, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { MENU_ITEMS } from '@/lib/constants';
+import { clearActionItem } from '@/lib/slice/menuSlice';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 type Props = {
 
@@ -9,10 +11,31 @@ const Board: React.FC<Props> = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const shouldDraw = useRef(false);
 
-    const {activeMenuItem} = useAppSelector(state => state.menu);
+    const actionMenuItem = useAppSelector(state => state.menu.actionMenuItem);
+    const activeMenuItem = useAppSelector(state => state.menu.activeMenuItem);
     const {color, size} = useAppSelector(state => state.toolbox[activeMenuItem]);
     
+    const dispatch = useAppDispatch();
     console.log('color', color);
+
+    useEffect(() => {
+        if(!canvasRef.current) return;
+
+        const canvas: HTMLCanvasElement = canvasRef.current;
+        const context: CanvasRenderingContext2D | null = canvas.getContext('2d');
+
+        if(actionMenuItem === MENU_ITEMS.DOWNLOAD){
+            const URL = canvas.toDataURL();
+            console.log(URL)
+            const download = document.createElement('a');
+            download.href = URL;
+            download.download = 'sketch.jpg';
+            download.click();
+            dispatch(clearActionItem());
+        }
+    }, [actionMenuItem, activeMenuItem, dispatch])
+
+    /** INITIALIZED */
     useEffect(() => {
         if(!canvasRef.current) return;
 
@@ -29,7 +52,7 @@ const Board: React.FC<Props> = () => {
     }, [size, color]);
 
     /** MOUNTED */
-    useEffect(() => {
+    useLayoutEffect(() => {
         if(!canvasRef.current) return;
 
         const canvas: HTMLCanvasElement = canvasRef.current;
