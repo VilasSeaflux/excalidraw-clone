@@ -1,9 +1,11 @@
 'use client'
 import React, { useState } from 'react'
 import { strokeColors } from '@/utils';
-import { MENU_ITEMS } from '@/lib/constants';
+import { COLORS, MENU_ITEMS } from '@/lib/constants';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { menuItemClick } from '@/lib/slice/menuSlice';
+import { changeBrushSize, changeColor } from '@/lib/slice/toolboxSlice';
+import { AnyARecord } from 'dns';
 
 type Props = {
 
@@ -21,8 +23,11 @@ export const Toolbox: React.FC<Props> = ({
     const showBrushToolOption = activeMenuItem === MENU_ITEMS.PENCIL || activeMenuItem === MENU_ITEMS.ERASER;
 
     /** HANDLERS */
-    const handleUpdateBrushSize = (e) => {
-        dispatch(menuItemClick(name))
+    const handleUpdateBrushSize = (e: any) => {
+        dispatch(changeBrushSize({item: activeMenuItem, size: e.target.value}))
+    }
+    const handleUpdateColor = (newColor: string) => {
+        dispatch(changeColor({item: activeMenuItem, color: newColor}))
     }
     return (
         <section className='border border-gray-200 rounded-lg p-3 w-1/6 shadow-sm'>
@@ -34,12 +39,12 @@ export const Toolbox: React.FC<Props> = ({
                             <div className='flex flex-row items-center justify-between w-full'>
                                 <div className='flex flex-row items-center space-x-3'>
                                     {
-                                        strokeColors.map((item, index) => (
+                                        Object.values(COLORS).map((item, index) => (
                                             <div
                                                 key={index}
                                                 style={{ backgroundColor: item }}
                                                 className={`w-6 h-6 p-1 border border-gray-200 rounded-md mt-1 hover:scale-110 transition-all duration-300 hover:border hover:border-gray-600 ${item === selected ? 'border-black ' : ''}`}
-                                                onClick={() => setSelected(item)}
+                                                onClick={() => handleUpdateColor(item)}
                                             />
                                         ))
                                     }
